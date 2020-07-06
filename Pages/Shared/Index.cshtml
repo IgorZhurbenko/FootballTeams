@@ -1,0 +1,123 @@
+﻿@page
+@model Index_DTO
+@*@{
+    ViewData["Title"] = "Home page";
+}*@
+
+<script src="~/js/PlayersFront.js"></script>
+<script src="~/js/vue.js"></script>
+<link rel="stylesheet" href="~/css/CustomStyles.css" />
+
+<div class="text-center">
+    <h1 class="display-4">Your own football players manager!</h1>
+    @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+
+    <table id="list" class="table">
+
+        <thead>
+            <tr>
+                @foreach (var ContactHeader in DataManager.PlayerMainFields.Except(new string[] { "id" }))
+                {
+                    <td>@ContactHeader.PutSpaces()</td>
+                }
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+
+            @*<tr v-for="PlayerInfo in PlayersInfo">
+                <td v-for="Field in PlayerMainFields">{{PlayerInfo[Field]}}</td>
+                <td>
+                    <button id="Edit_{{PlayerInfo["id"]}}">
+                        Edit
+                    </button>
+                    <button id="Delete_{{PlayerInfo["id"]}}">
+                        Delete
+                    </button>                    
+                </td>
+            </tr>*@
+
+            @foreach (var PlayerInfo in DataManager.AllPlayers())
+            {
+                <tr>
+                    @foreach (var ShowableField in DataManager.PlayerMainFields.Except(new string[] { "id" }))
+                    {
+                        <td>@(PlayerInfo.ContainsKey(ShowableField)? PlayerInfo[ShowableField] : "")</td>
+                    }
+                    <td>
+                        <button onclick="Edit(@PlayerInfo["Id"], PlayerInfoVue)">
+                            Edit
+                        </button>
+                        <button onclick="Delete(@PlayerInfo["Id"])">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>
+                    <button onclick="CreateNew(PlayerInfoVue)">Create</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    @*<script>
+        let IndexVue = new Vue(
+            {
+                el : "#list",
+                data: {
+                    PlayersInfo: JSON.parse('@Html.Raw(DataManager.AllPlayersForVue())'),
+                    PlayerMainFields: JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(DataManager.PlayerMainFields))'),
+                    PlayerShowableFields: JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(DataManager.PlayerShowableFields))')
+                }
+            })
+    </script>*@
+
+    <table class="table" hidden id="PlayerInfo">
+        <thead>
+            <tr>
+                <td>
+                    <button onclick="Return()">
+                        Return
+                    </button>
+                </td>
+                <td>
+                    <button onclick="Save(PlayerInfoVue)">
+                        Save
+                    </button>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (string Field in DataManager.PlayerShowableFields.Except(new string[] { "id" }))
+            {
+                <tr>
+                    <td>
+                        @Field.PutSpaces()
+                    </td>
+                    <td>
+                        @Html.ProperInput(Field)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        var PlayerInfoVue = new Vue({
+            el: '#PlayerInfo',
+            data: {
+                       @Html.Raw(DataManager.ParameterStringToCreateVUE())
+            }
+        })
+
+    </script>
+    @*@foreach (string Field in DataManager.PlayerShowableFields)
+        {
+            <script>
+                ContactInfo.@Field = 10;
+                </script>
+        }*@
+
+
+
+</div>

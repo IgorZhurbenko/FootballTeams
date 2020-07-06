@@ -1,0 +1,24 @@
+﻿.TextBoxBottomLine {
+    border-color: transparent transparent darkgray transparent;
+    width: 350px;
+}
+
+.TextBoxBottomLineError {
+    border-color: transparent transparent red transparent;
+    border-bottom: 2px dashed;
+    border-bottom-color: red;
+}
+
+.TextBoxBottomLineError:focus {
+    outline: none
+}
+
+
+.TextBoxBottomLine:focus {
+    outline:none
+    }
+
+.NativeButton {
+    background-color:transparent;
+    border:none
+}
